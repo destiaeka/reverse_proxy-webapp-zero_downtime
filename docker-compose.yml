@@ -54,7 +54,7 @@ services:
     image: nginx:stable-alpine
     container_name: finalproject-nginx
     ports:
-      - "8002:80"
+      - "802:80"
     depends_on:
       - blueapp
       - greenapp
