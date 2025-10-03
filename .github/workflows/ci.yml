@@ -31,7 +31,7 @@ jobs:
     - name: create table
       run: |
         PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d products -c "
-        CREATE IF NOT EXISTS products (
+        CREATE TABLE IF NOT EXISTS products (
           id SERIAL PRIMARY KEY,
           name varchar(50),
           price varchar(50)
