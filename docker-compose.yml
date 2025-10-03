@@ -51,7 +51,7 @@ services:
       - finalproject
 
   nginx:
-    image: ngins:stable-alpine
+    image: nginx:stable-alpine
     container_name: finalproject-nginx
     ports:
       - "80:80"
