@@ -64,4 +64,7 @@ services:
       - finalproject
 
 networks:
+  finalproject:
+
+volumes:
   finalproject-postgres:
