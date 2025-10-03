@@ -59,7 +59,7 @@ services:
       - blueapp
       - greenapp
     volumes:
-      - nginx/nginx.conf:/etc/nginx/conf.f/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - finalproject
 
