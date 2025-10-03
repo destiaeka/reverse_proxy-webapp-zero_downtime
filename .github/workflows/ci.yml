@@ -1,0 +1,68 @@
+name: Workflow
+
+on:
+  push:
+    branhes: ["main"]
+  pull_request:
+    branhes: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres 
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: products
+        ports:
+          - "5432:5432"
+        options: >- 
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: create table
+      run: |
+        PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d products -c "
+        CREATE IF NOT EXISTS products (
+          id SERIAL PRIMARY KEY,
+          name varchar(50),
+          price varchar(50)
+        );"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Copy files via SSH
+      uses: appleboy/scp-action@v1
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: ${{ secrets.VPS_PORT }}
+        source: "./*"
+        target: /var/www/finalproject
+
+    - name: Copy files via SSH
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: ${{ secrets.VPS_PORT }}
+        script: |
+          cd /var/www/finalproject
+          git pull origin main
+          docker-compose down -v
+          docker-compose up -d --build

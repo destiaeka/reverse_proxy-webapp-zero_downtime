@@ -1,0 +1,67 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres:15
+    container_name: finalproject-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: products
+    volumes:
+      - finalproject-postgres:/var/lib/mysql
+    ports:
+      - "5432:5432"
+    networks:
+      - finalproject
+  
+  blueapp:
+    build: ./blueapp
+    container_name: blueapp
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: products
+      DB_PORT: 5432
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    networks:
+      - finalproject
+
+  greenapp:
+    build: ./greenapp
+    container_name: greenapp
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: products
+      DB_PORT: 5432
+    ports:
+      - 3001:3000
+    depends_on:
+      - db
+    networks:
+      - finalproject
+
+  nginx:
+    image: ngins:stable-alpine
+    container_name: finalproject-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - blueapp
+      - greenapp
+    volumes:
+      - nginx/nginx.conf:/etc/nginx/conf.f/default.conf
+    networks:
+      - finalproject
+
+networks:
+  finalproject:
