@@ -1,16 +1,16 @@
 name: Workflow
 
 on:
-  push:
-    branhes: ["main"]
+  push: #workflow akan berjalan tiap kali ada push dan pull di branch main
+    branches: ["main"]
   pull_request:
-    branhes: ["main"]
+    branches: ["main"]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest #menggunakan runner ubuntu
 
-    services:
+    services: #buat container pada runner ubuntu
       db:
         image: postgres:15
         env:
@@ -26,9 +26,9 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4 #ambil code
 
-    - name: create table
+    - name: create table #buat table pada container postgre yang dibuat
       run: |
         PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d products -c "
         CREATE TABLE IF NOT EXISTS products (
@@ -38,13 +38,13 @@ jobs:
         );"
 
   deploy:
-    needs: build
+    needs: build #menunggu job build dijalankan
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4 #ambil code
 
-    - name: Copy files via SSH
+    - name: Copy files via SSH #copy seluruh file ke /var/www/finalproject
       uses: appleboy/scp-action@v1
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -54,7 +54,7 @@ jobs:
         source: "./*"
         target: /var/www/finalproject
 
-    - name: Copy files via SSH
+    - name: Configure server #menuliskan perintah untuk server agar menjalankan container 
       uses: appleboy/ssh-action@v1
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -63,7 +63,6 @@ jobs:
         port: ${{ secrets.VPS_PORT }}
         script: |
           cd /var/www/finalproject
-          git pull origin main
           docker-compose down -v
           docker-compose up -d --build
       
