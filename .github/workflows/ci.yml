@@ -24,15 +24,16 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
     
-    - name: SonarQube Scan
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v2
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: |
-        npx sonar-scanner \
-          -Dsonar.projectKey=reverseproxy_webapp_zerodowntime \
-          -Dsonar.sources=. \
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}   
+      with:
+        args: >
+          -Dsonar.projectKey=reverseproxy_webapp_zerodowntime
+          -Dsonar.organization=destiaeka
+          -Dsonar.host.url=https://sonarcloud.io
+
 
   deploy:
     needs: build #menunggu job build dijalankan
