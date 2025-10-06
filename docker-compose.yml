@@ -1,23 +1,23 @@
 version: '3.3'
 
 services:
-  db:
+  db: #dockercompose untuk postgre
     image: postgres:15
     container_name: finalproject-postgres
     restart: always
-    environment:
+    environment: #set environment variabel (disesuaikan dengan file di app nodejs)
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: products
     volumes:
-      - finalproject-postgres:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - finalproject-postgres:/var/lib/postgresql/data #mount volume untuk service db
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql #mount database dari local ke container
     expose:
       - 5432
     networks:
       - finalproject
   
-  blueapp:
+  blueapp: #dockercompose untuk blueapp
     build: ./blueapp
     container_name: blueapp
     restart: always
@@ -28,13 +28,13 @@ services:
       DB_NAME: products
       DB_PORT: 5432
     expose:
-      - 3000
+      - 3000 #blueapp menggunakan port 3000
     depends_on:
       - db
     networks:
       - finalproject
 
-  greenapp:
+  greenapp: #dockercompose untuk greenapp
     build: ./greenapp
     container_name: greenapp
     restart: always
@@ -45,22 +45,22 @@ services:
       DB_NAME: products
       DB_PORT: 5432
     expose:
-      - 3001
+      - 3001 #greenapp menggunakan port 3001
     depends_on:
       - db
     networks:
       - finalproject
 
-  nginx:
+  nginx: #dockercompose nginx digunakan untuk reverse proxy
     image: nginx:stable-alpine
     container_name: finalproject-nginx
     ports:
-      - "802:80"
+      - "802:80" #menggunakan port 802, sehingga client akses pake port 802
     depends_on:
       - blueapp
       - greenapp
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf #mount file dari local ke container
     networks:
       - finalproject
 
