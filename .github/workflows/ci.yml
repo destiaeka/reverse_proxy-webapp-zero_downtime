@@ -30,7 +30,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         args: >
-          -Dsonar.projectKey=reverseproxy_webapp_zerodowntime
+          -Dsonar.projectKey=reverse_proxy-webapp-zero_downtime
           -Dsonar.organization=destiaeka
           -Dsonar.host.url=https://sonarcloud.io
 
