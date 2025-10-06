@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4 #ambil code
 
-  sonar-alaysis:
+  sonar-analis:
     needs: build
     runs-on: ubuntu-latest
 
@@ -36,7 +36,7 @@ jobs:
 
 
   deploy:
-    needs: build #menunggu job build dijalankan
+    needs: sonar-analis
     runs-on: ubuntu-latest
 
     steps:
