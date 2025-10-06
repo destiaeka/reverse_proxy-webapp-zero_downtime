@@ -1,7 +1,14 @@
+#base image menggunakan node 18
 FROM node:18
+#menentukan directory kerja
 WORKDIR /usr/src/app
+#copy file package.json ke workdir
 COPY package*.json ./
+#install dependency
 RUN npm install
+#copy seluruh file ke workdir
 COPY . .
+#memberitahukan port yang digunakan aplikasi
 EXPOSE 3000
+#menjalankan npm start setiap kali container start
 CMD ["npm", "start"]
