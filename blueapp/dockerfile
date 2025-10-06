@@ -11,4 +11,8 @@ COPY . .
 #memberitahukan port yang digunakan aplikasi
 EXPOSE 3000
 #menjalankan npm start setiap kali container start
+<<<<<<< HEAD
 CMD ["npm", "start"]
+=======
+CMD ["npm", "start"]
+>>>>>>> fcb05f0c3d9bcbeb86c2dc42e27a064896f87d2a
