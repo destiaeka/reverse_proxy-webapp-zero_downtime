@@ -8,3 +8,7 @@ Jadi ada container Blue app dan Green App yang terhubung ke 1 database yang sama
 Client akan akses HA lalu diteruskan ke Node.js App
 - Shared Database Postgresql
 Blue & Green app terhubung ke database yang sama sehingga tampilan endpoint dari ke2 App akan sama. 
+
+<h4>SonarQube</h4>
+
+SonarQube pada workflow digunakan untuk analisis code apakah passed atau failed. Terdapat tampilan dashboard untuk hasil analisis
