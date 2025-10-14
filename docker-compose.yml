@@ -33,6 +33,11 @@ services:
       - db
     networks:
       - finalproject
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   greenapp: #dockercompose untuk greenapp
     build: ./greenapp
@@ -50,6 +55,11 @@ services:
       - db
     networks:
       - finalproject
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nginx: #dockercompose nginx digunakan untuk reverse proxy
     image: nginx:stable-alpine

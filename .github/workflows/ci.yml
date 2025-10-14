@@ -19,20 +19,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-    - uses: actions/setup-java@v5
-      with:
-        distribution: 'temurin'
-        java-version: '21'
+    # - uses: actions/setup-java@v5
+    #   with:
+    #     distribution: 'temurin'
+    #     java-version: '21'
     
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v2
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        args: >
-          -Dsonar.projectKey=destiaeka_reverse_proxy-webapp-zero_downtime
-          -Dsonar.organization=destiaeka
-          -Dsonar.host.url=https://sonarcloud.io
+    # - name: SonarCloud Scan
+    #   uses: SonarSource/sonarcloud-github-action@v2
+    #   env:
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #   with:
+    #     args: >
+    #       -Dsonar.projectKey=destiaeka_reverse_proxy-webapp-zero_downtime
+    #       -Dsonar.organization=destiaeka
+    #       -Dsonar.host.url=https://sonarcloud.io
 
 
   deploy:
