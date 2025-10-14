@@ -42,11 +42,11 @@ if [ "$STATUS" != "healthy" ]; then
 fi
 
 # Ganti arah trafik di nginx.conf
-echo "🔧 Switching Nginx to $TARGET..."
-if [ "$TARGET" == "blueapp" ]; then
-  sed -i 's/server greenapp:3001;/server blueapp:3000;/' nginx/nginx.conf
+# 🔧 Switch Nginx backend
+if [ "$TARGET" == "greenapp" ]; then
+  sed -i 's/server .*:[0-9]*;/server greenapp:3001;/' nginx/nginx.conf
 else
-  sed -i 's/server blueapp:3000;/server greenapp:3001;/' nginx/nginx.conf
+  sed -i 's/server .*:[0-9]*;/server blueapp:3000;/' nginx/nginx.conf
 fi
 
 echo "♻️ Reloading Nginx..."
