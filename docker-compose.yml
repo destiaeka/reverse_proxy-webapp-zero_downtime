@@ -27,8 +27,8 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: products
       DB_PORT: 5432
-    expose:
-      - 3000 #blueapp menggunakan port 3000
+    ports:
+      - "3000:3000"
     depends_on:
       - db
     networks:
@@ -49,8 +49,8 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: products
       DB_PORT: 5432
-    expose:
-      - 3001 #greenapp menggunakan port 3001
+    ports:
+      - "3001:3001"
     depends_on:
       - db
     networks:
