@@ -61,6 +61,6 @@ jobs:
         port: ${{ secrets.VPS_PORT }}
         script: |
           cd /var/www/finalproject
-          docker-compose down -v
-          docker-compose up -d --build
+          git pull origin main
+          bash switch.sh
       
