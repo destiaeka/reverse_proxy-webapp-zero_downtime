@@ -1,3 +1,4 @@
+<video src="zerodowntime.mp4" controls width="600"></video>
 
 <h1> High Availability WebApp & Zero Downtime </h1>
 
