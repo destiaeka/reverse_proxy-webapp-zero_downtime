@@ -19,8 +19,8 @@ else
 fi
 
 echo "🚀 Deploying new version to $TARGET..."
-docker compose build $TARGET
-docker compose up -d $TARGET
+docker-compose build $TARGET
+docker-compose up -d $TARGET
 
 # Wait for target app health check
 echo "⏳ Waiting for $TARGET to be healthy..."
