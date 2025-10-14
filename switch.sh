@@ -16,8 +16,8 @@ echo "🔄 Currently active: $ACTIVE_APP"
 echo "🚀 Deploying new version to $NEW_APP..."
 
 # Build dan jalankan app baru
-docker compose build $NEW_APP
-docker compose up -d $NEW_APP
+docker-compose build $NEW_APP
+docker-compose up -d $NEW_APP
 
 # Tunggu sampai app baru benar-benar ready
 echo "⏳ Waiting for $NEW_APP to be ready..."
