@@ -1,4 +1,5 @@
-<video src="zerodowntime.mp4" controls width="600"></video>
+<img width="1919" height="476" alt="image" src="https://github.com/user-attachments/assets/d37631fa-28d7-4374-9e8f-cf581db16be9" />
+<img width="1914" height="548" alt="image" src="https://github.com/user-attachments/assets/fbb29fa7-b7ff-41be-8ae6-407f24d7d7b2" />
 
 <h1> High Availability WebApp & Zero Downtime </h1>
 
