@@ -1,21 +1,45 @@
 #!/bin/bash
 set -e
 
-NGINX_CONF="/var/www/finalproject/nginx/nginx.conf"
+echo "🟢 Checking active app..."
+ACTIVE_APP=$(grep "proxy_pass" ./nginx/nginx.conf | grep -oE "(blueapp|greenapp)" | head -1)
 
-echo "🟢 Deploying new Green app..."
-docker compose -f docker-compose.green.yml up -d --build
-
-echo "🔍 Checking Green app health..."
-sleep 5
-if curl -f http://localhost:3001 > /dev/null 2>&1; then
-  echo "✅ Green app healthy, switching traffic..."
-  sed -i 's/server blueapp:3000;/#server blueapp:3000;/' $NGINX_CONF
-  sed -i 's/#server greenapp:3001;/server greenapp:3001;/' $NGINX_CONF
-  docker exec finalproject-nginx nginx -s reload
-  echo "🎉 Traffic switched to Green app!"
+if [ "$ACTIVE_APP" = "blueapp" ]; then
+  NEW_APP="greenapp"
+  NEW_PORT="3001"
 else
-  echo "❌ Green app failed health check, rollback..."
-  docker compose -f docker-compose.green.yml down
-  exit 1
+  NEW_APP="blueapp"
+  NEW_PORT="3000"
 fi
+
+echo "🔄 Currently active: $ACTIVE_APP"
+echo "🚀 Deploying new version to $NEW_APP..."
+
+# Build dan jalankan app baru
+docker compose build $NEW_APP
+docker compose up -d $NEW_APP
+
+# Tunggu sampai app baru benar-benar ready
+echo "⏳ Waiting for $NEW_APP to be ready..."
+for i in {1..10}; do
+  if curl -s http://localhost:$NEW_PORT > /dev/null; then
+    echo "✅ $NEW_APP is up!"
+    break
+  fi
+  echo "⏳ Waiting..."
+  sleep 3
+done
+
+# Update konfigurasi Nginx agar mengarah ke app baru
+echo "🔧 Updating Nginx configuration..."
+sed -i "s/$ACTIVE_APP/$NEW_APP/g" ./nginx/nginx.conf
+
+# Reload Nginx tanpa downtime
+echo "♻️ Reloading Nginx..."
+docker exec finalproject-nginx nginx -s reload
+
+# (Opsional) Matikan app lama
+echo "🧹 Stopping old container $ACTIVE_APP..."
+docker compose stop $ACTIVE_APP
+
+echo "✅ Deployment switched from $ACTIVE_APP → $NEW_APP successfully!"
