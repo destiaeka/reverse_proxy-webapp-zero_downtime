@@ -1,14 +1,31 @@
+
 <h1> High Availability WebApp & Zero Downtime </h1>
 
-Client → Reverse Proxy (HAProxy/Nginx) → [Blue App | Green App] → Database
+## 🏗️ Arsitektur Sistem
+Client → Reverse Proxy (HAProxy/Nginx) → [Green App | Blue App] → Database
+- Client: Mengakses App menggunakan IP/Domain reverse proxy
+- Reverse Proxy: Trafic Switching
+- Blue App/Green App: 2 versi App yang berbeda
+- Database: Menyimpan data utama dan digunakan bersama oleh kedua environment. 
 
-Jadi ada container Blue app dan Green App yang terhubung ke 1 database yang sama. lalu bisa switch tanpa ada waktu down. namun client akan akses reverse proxynya bukan langsung ke Node.js App
+## 💡 Konsep Blue-Green Deployment
+- Green App (v1): App yang aktif melayani client
+- Blue App (v2): App yang sedang dipersiapkan dan diuji
+- Apabila uji berhasil Reverse Proxy menggarahkan trafic ke Blue App
 
-- Reverse Proxy
-Client akan akses HA lalu diteruskan ke Node.js App
-- Shared Database Postgresql
-Blue & Green app terhubung ke database yang sama sehingga tampilan endpoint dari ke2 App akan sama. 
+## 🧱 Konfigurasi & Deployment
+1. **Setup Reverse Proxy**
+   - Green App: 3001
+   - Blue App: 3000
+   - Reverse Proxy: 802
+     
+2. **Jalankan Environment**
+   ``` docker-compose up -d ```
+    Apabila ingin switch tampilan
+   ``` bash switch.sh ```
 
-<h4>SonarQube</h4>
+## 🧩 Fitur Utama
+- Zero Downtime Deployment
+- Failover otomatis (jika satu instance down)
+- Traffic Switching
 
-SonarQube pada workflow digunakan untuk analisis code apakah passed atau failed. Terdapat tampilan dashboard untuk hasil analisis
