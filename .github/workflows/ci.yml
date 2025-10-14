@@ -61,7 +61,7 @@ jobs:
         port: ${{ secrets.VPS_PORT }}
         script: |
           cd /var/www/finalproject
-          docker-compose up -d --build blueapp nginx db
+          docker-compose up -d --build greenapp nginx db
       
     - name: Configure server #menuliskan perintah untuk server agar menjalankan container 
       uses: appleboy/ssh-action@v1
